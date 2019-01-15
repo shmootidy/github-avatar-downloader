@@ -5,6 +5,7 @@ var input = process.argv.slice(2);
 
 console.log('Welcome to the GitHub Avatar Downloader!');
 
+// sends info to the cb to be processed. Info is from user and from the locally scoped options.
 function getRepoContributors (repoOwner, repoName, cb) {
   if (!repoOwner || !repoName){
     return console.log('You have to provide a repo owner and a repo name for this function to work.');
@@ -21,12 +22,14 @@ function getRepoContributors (repoOwner, repoName, cb) {
   });
 }
 
+// makes a new subdirectory to fill with photos
 function makeDir(dirName){
   fs.mkdir(dirName, (err)=>{
     if (err) throw err;
   })
 }
 
+// makes the URL request, receives the response, and consoles a bunch of relevant messages; then downloads the images into the newly made dir
 function downloadImageByURL (url, filePath) {
   request.get(url)
     .on('error', (err) => {
@@ -44,6 +47,7 @@ function downloadImageByURL (url, filePath) {
   });
 }
 
+// calls the function with CLI input
 getRepoContributors(input[0], input[1], function(err, result){
   result = JSON.parse(result);
   makeDir('avatars/');
