@@ -1,6 +1,5 @@
 require('dotenv').config();
 var request = require('request');
-// var secrets = require('./secrets.js');
 var fs = require('fs');
 var input = process.argv.slice(2);
 
@@ -48,12 +47,33 @@ function downloadImageByURL (url, filePath) {
   });
 }
 
+// checks the input for the correct length
+function inputChecker (input) {
+  var checker = true;
+  if (input.length !== 2){
+    console.log("Your input is incorrect. Two values, please.");
+    checker = false;
+    return checker;
+  }
+  return checker;
+}
+
+
 // calls the function with CLI input
 getRepoContributors(input[0], input[1], function(err, result){
-  result = JSON.parse(result);
-  makeDir('avatars/');
-  for (var user in result){
-    downloadImageByURL(result[user].avatar_url, result[user].login);
+  if (inputChecker(input)){
+    result = JSON.parse(result);
+    makeDir('avatars/');
+    for (var user in result){
+      downloadImageByURL(result[user].avatar_url, result[user].login);
+    }
   }
 });
 
+// STRETCH
+// the folder to store images to does not exist - ✔
+// an incorrect number of arguments given to program (0, 1, 3, etc.) - ✔
+// the provided owner/repo does not exist
+// the .env file is missing
+// the .env file is missing information
+// the .env file contains incorrect credentials
