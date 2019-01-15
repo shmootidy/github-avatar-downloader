@@ -18,6 +18,9 @@ function getRepoContributors (repoOwner, repoName, cb) {
     }
   };
   request(options, function(err, res, body){
+    if (JSON.parse(body).message == "Not Found"){
+      return console.log("Invalid inputs. URL does not exist.")
+    }
     cb(err, body);
   });
 }
@@ -48,7 +51,7 @@ function downloadImageByURL (url, filePath) {
 }
 
 // checks the input for the correct length
-function inputChecker (input) {
+function inputLengthChecker (input) {
   var checker = true;
   if (input.length !== 2){
     console.log("Your input is incorrect. Two values, please.");
@@ -61,7 +64,7 @@ function inputChecker (input) {
 
 // calls the function with CLI input
 getRepoContributors(input[0], input[1], function(err, result){
-  if (inputChecker(input)){
+  if (inputLengthChecker(input)){
     result = JSON.parse(result);
     makeDir('avatars/');
     for (var user in result){
