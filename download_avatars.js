@@ -7,7 +7,7 @@ console.log('Welcome to the GitHub Avatar Downloader!');
 
 function getRepoContributors (repoOwner, repoName, cb) {
   if (!repoOwner || !repoName){
-    return console.log("You have to provide a repo owner and a repo name for this function to work.");
+    return console.log('You have to provide a repo owner and a repo name for this function to work.');
   }
   var options = {
     url: 'https://api.github.com/repos/' + repoOwner + '/' + repoName + '/contributors',
@@ -25,7 +25,7 @@ getRepoContributors(input[0], input[1], function(err, result){
   result = JSON.parse(result);
   makeDir('avatars/');
   for (var user in result){
-    downloadImageByURL(result[user].avatar_url, 'avatars/' + result[user].login + '.jpg');
+    downloadImageByURL(result[user].avatar_url, result[user].login);
   }
 });
 
@@ -38,16 +38,16 @@ function makeDir(dirName){
 function downloadImageByURL (url, filePath) {
   request.get(url)
           .on('error', (err) => {
-            console.log("Something went wrong. Error," + err);
+            console.log('Something went wrong. Error,' + err);
           })
           .on('response', (response) => {
-            console.log("We got a response!");
+            console.log('We got a response from ' + filePath + '!');
           })
           .on('end', ()=>{
-            console.log("Downloading images...");
+            console.log('Downloading ' + filePath + '\'s image...');
           })
-          .pipe(fs.createWriteStream(filePath))
+          .pipe(fs.createWriteStream('avatars/' + filePath + '.jpg'))
           .on('finish', ()=>{
-            console.log("Download complete. Check your directory for the file.")
+            console.log('Download complete. Check your directory for ' + filePath + '\'s photo.')
           })
 }
