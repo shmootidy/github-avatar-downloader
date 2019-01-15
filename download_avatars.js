@@ -21,14 +21,6 @@ function getRepoContributors (repoOwner, repoName, cb) {
   });
 }
 
-getRepoContributors(input[0], input[1], function(err, result){
-  result = JSON.parse(result);
-  makeDir('avatars/');
-  for (var user in result){
-    downloadImageByURL(result[user].avatar_url, result[user].login);
-  }
-});
-
 function makeDir(dirName){
   fs.mkdir(dirName, (err)=>{
     if (err) throw err;
@@ -37,17 +29,26 @@ function makeDir(dirName){
 
 function downloadImageByURL (url, filePath) {
   request.get(url)
-          .on('error', (err) => {
-            console.log('Something went wrong. Error,' + err);
-          })
-          .on('response', (response) => {
-            console.log('We got a response from ' + filePath + '!');
-          })
-          .on('end', ()=>{
-            console.log('Downloading ' + filePath + '\'s image...');
-          })
-          .pipe(fs.createWriteStream('avatars/' + filePath + '.jpg'))
-          .on('finish', ()=>{
-            console.log('Download complete. Check your directory for ' + filePath + '\'s photo.')
-          })
+    .on('error', (err) => {
+      console.log('Something went wrong. Error,' + err);
+    })
+    .on('response', (response) => {
+      console.log('We got a response from ' + filePath + '!');
+    })
+    .on('end', ()=>{
+      console.log('Downloading ' + filePath + '\'s image...');
+    })
+    .pipe(fs.createWriteStream('avatars/' + filePath + '.jpg'))
+    .on('finish', ()=>{
+      console.log('Download complete. Check your directory for ' + filePath + '\'s photo.')
+  });
 }
+
+getRepoContributors(input[0], input[1], function(err, result){
+  result = JSON.parse(result);
+  makeDir('avatars/');
+  for (var user in result){
+    downloadImageByURL(result[user].avatar_url, result[user].login);
+  }
+});
+
