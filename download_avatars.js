@@ -22,4 +22,8 @@ getRepoContributors('jquery', 'jquery', function(err, result){
   for (var user in result){
     console.log('Result:', result[user].avatar_url);
   }
-})
+});
+
+function downloadImageByURL (url, filePath) {
+  // body...
+}
