@@ -23,10 +23,17 @@ function getRepoContributors (repoOwner, repoName, cb) {
 
 getRepoContributors(input[0], input[1], function(err, result){
   result = JSON.parse(result);
+  checkAndMakeDir('avatars/');
   for (var user in result){
     downloadImageByURL(result[user].avatar_url, 'avatars/' + result[user].login + '.jpg');
   }
 });
+
+function makeDir(dirName){
+  fs.mkdir(dirName, (err)=>{
+    if (err) throw err;
+  })
+}
 
 function downloadImageByURL (url, filePath) {
   request.get(url)
